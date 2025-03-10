@@ -9,7 +9,7 @@ if [ ! -f /etc/arch-release ]; then
 fi
 
 # Calculate updates for each service
-AUR=$(yay -Qua | wc -l)
+AUR=$(paru -Qua | wc -l)
 OFFICIAL=$(checkupdates | wc -l)
 
 # Case/switch for each service updates
@@ -20,7 +20,7 @@ esac
 
 # If the parameter is "update", update all services
 if [ "$1" = "update" ]; then
-    kitty --title update-sys sh -c 'yay -Syu'
+    foot -t update-sys sh -c 'paru -Syu'
 fi
 
 # If there aren't any parameters, return the total number of updates
@@ -35,7 +35,7 @@ if [ "$1" = "" ]; then
         echo ""
     else
         # This Update symbol is RTL. So &#x202d; is left-to-right override.
-        echo " $COUNT"
+        echo "  $COUNT"
     fi
     exit 0
 fi
