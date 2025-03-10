@@ -18,8 +18,10 @@ return require("lazy").setup({
     priority = 100,
   },
 
+  require('plugins.telescope'),
+
   {
-    "thomppa030/EditAnywhere.nvim",
+    "thomppa030/unreal-tools.nvim",
     branch = "dev",
     dependencies = {
       "neovim/nvim-lspconfig",
@@ -71,24 +73,9 @@ return require("lazy").setup({
 
   -- Colorizer color Previewer
   {
-    require('plugins/colorizer')
+    require('plugins.colorizer')
   },
 
-  {
-    'nvim-telescope/telescope.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' }
-    },
-    config = function()
-      require('telescope').setup()
-      local builtin = require('telescope.builtin')
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Find files' })
-      vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Live grep' })
-      vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Find buffers' })
-      vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Help Tags' })
-    end,
-  },
   {
     "toppair/peek.nvim",
     event = { "VeryLazy" },
@@ -119,6 +106,10 @@ return require("lazy").setup({
 
   {
     'tjdevries/present.nvim'
+  },
+
+  {
+    require('plugins.terminal')
   },
 
   {
