@@ -156,6 +156,12 @@ link_config() {
     else
         echo -e "${RED}Failed to create link.${NC}"
     fi
+
+    echo -e "${GREEN}Creating symbolic link from .zshrc to HOME{NC}"
+    ln -sf ".zshrc" "~/.zshrc"
+
+    echo -e "${GREEN}Creating symbolic link from starship.toml to .config/{NC}"
+    ln -sf "starship.toml" "~/.config/starship.toml"
 }
 
 main() {
