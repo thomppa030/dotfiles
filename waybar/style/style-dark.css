@@ -32,7 +32,7 @@ window#waybar {
 }
 
 /* Module styling */
-#cpu, #disk,#memory, #custom-updated,#battery, #network, #pulseaudio, #clock, #tray, #window {
+#cpu, #disk,#memory, #custom-updates,#battery, #network, #pulseaudio, #clock, #tray, #window {
     padding: 0 10px;
     margin: 4px 2px;
 }
