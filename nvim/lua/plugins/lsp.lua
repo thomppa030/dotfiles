@@ -16,7 +16,7 @@ return {
     })
 
     require("mason-lspconfig").setup({
-      ensure_installed = { "lua_ls", "clangd", "ts_ls", "html", "svelte" },
+      ensure_installed = { "lua_ls", "cmake","clangd", "ts_ls", "html", "svelte" },
       automatic_installation = true,
     })
 
@@ -72,6 +72,10 @@ return {
       on_attach = on_attach,
     })
     lspconfig.svelte.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+    })
+    lspconfig.cmake.setup({
       capabilities = capabilities,
       on_attach = on_attach,
     })
