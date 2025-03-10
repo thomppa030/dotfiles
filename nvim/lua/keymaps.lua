@@ -31,7 +31,6 @@ map('v', '<A-k>', ":m '>-2<CR>gv=gv", {desc = 'Move selection down'})
 map('n', '<C-n>', ':lua require("plugins/oil").toggle_oil_sidebar()<CR>')
 
 map('n', '<leader>gg', ':tabnew<CR>:terminal lazygit<CR>i', {desc = 'Open a terminal with lazygit in a new tab'})
-map('n', '<leader>tt', ':split<CR>:terminal<CR>i', {desc = 'Open a terminal in a horizontal split'})
 
 -- Change cwd
 map('n', '<leader>cd', ':lcd %:p:h<CR>', {noremap = true, silent = true, desc = "Changes the current working directory to current path"})
