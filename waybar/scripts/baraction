@@ -26,7 +26,8 @@ gsettings set org.gnome.desktop.interface gtk-theme "Andromeda"
 gsettings set org.gnome.desktop.interface icon-theme "Breeze Dark"
 
 #change the background image and be cool about it ;)
-swww img ~/.config/hypr/wallpaper$SWITCHTO.png --transition-fps 60 --transition-type wipe --transition-duration 2
+# swww img ~/.config/hypr/wallpaper$SWITCHTO.png --transition-fps 60 --transition-type wipe --transition-duration 2
+swww img ~/dotfiles/hypr/wallpaper$SWITCHTO.png --transition-fps 60 --transition-type wipe --transition-duration 2
 
 #update the sddm image
 ln -sf /usr/share/sddm/themes/sdt/Backgrounds/wallpaper$SWITCHTO.png /usr/share/sddm/themes/sdt/wallpaper.png
