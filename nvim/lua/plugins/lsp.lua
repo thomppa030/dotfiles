@@ -16,7 +16,7 @@ return {
     })
 
     require("mason-lspconfig").setup({
-      ensure_installed = { "lua_ls", "clangd", "ts_ls", "html", "svelte" },
+      ensure_installed = { "lua_ls", "cmake","clangd", "ts_ls", "html", "svelte" },
       automatic_installation = true,
     })
 
