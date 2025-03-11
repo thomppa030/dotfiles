@@ -18,7 +18,12 @@ return require("lazy").setup({
     priority = 100,
   },
 
+  {
+    "nvim-neotest/nvim-nio"
+  },
+
   require('plugins.telescope'),
+  require('plugins.dap'),
 
   {
     "thomppa030/unreal-tools.nvim",
