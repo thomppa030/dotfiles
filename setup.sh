@@ -173,10 +173,10 @@ link_config() {
     touch ~/.config/starship.toml
 
     echo -e "${GREEN}Creating symbolic link from .zshrc to HOME{NC}"
-    ln -sf "${REPO_DIR}/.zshrc" "~/.zshrc"
+    ln -sf "${REPO_DIR}/.zshrc" "$HOME/.zshrc"
 
     echo -e "${GREEN}Creating symbolic link from starship.toml to .config/{NC}"
-    ln -sf "${REPO_DIR}/starship.toml" "~/.config/starship.toml"
+    ln -sf "${REPO_DIR}/starship.toml" "$HOME/.config/starship.toml"
 }
 
 main() {
