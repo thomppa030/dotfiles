@@ -1,11 +1,24 @@
 local M = {}
+
+function M.toggle_oil_sidebar()
+  local oil = require("oil")
+  local win_id = vim.fn.bufwinid("oil://")
+
+  if win_id ~= -1 then
+    -- If Oil is already open, close it
+    vim.api.nvim_win_close(win_id, true)
+  else
+    -- Open Oil as a floating window
+    oil.open_float()
+  end
+end
+
 function M.setup()
   require("oil").setup({
-    -- Oil configuration options
     default_file_explorer = true,
-    -- Use floating window for preview
+    -- Use floating windows by default
+    default_view = "float",
     preview = {
-      -- Set to false to disable the file preview
       enabled = true,
       border = "rounded"
     },
@@ -18,29 +31,24 @@ function M.setup()
         return false
       end,
     },
-    -- Customize the window
+    -- Customize the floating window
     float = {
       -- Set this to false for normal buffer behavior
       max_width = 60,
+      max_height = 30,
       border = "rounded",
+      win_options = {
+        winblend = 10, -- slight transparency
+      },
+      override = function(conf)
+        -- You can customize the floating window further here
+        return conf
+      end,
     },
     -- Customizing keymaps
     keymaps = {
       ["g?"] = "actions.show_help",
-      ["<CR>"] = function()
-        local entry = require("oil").get_cursor_entry()
-
-        if not entry then return end
-
-        if entry.type == "directory" then
-          require("oil.actions").select.callback()
-        else
-          -- Custom handler for CR to open files in the right buffer
-          require("oil.actions").select.callback()
-          -- If we're in the sidebar, focus the window to the right
-          vim.cmd('wincmd l')
-        end
-      end,
+      ["<CR>"] = "actions.select",
       ["<C-v>"] = "actions.select_vsplit",
       ["<C-s>"] = "actions.select_split",
       ["<C-t>"] = "actions.select_tab",
@@ -48,64 +56,13 @@ function M.setup()
       ["_"] = "actions.open_cwd",
       ["`"] = "actions.cd",
       ["~"] = "actions.tcd",
+      ["<C-p>"] = "actions.preview",
       ["gs"] = "actions.change_sort",
       ["gx"] = "actions.open_external",
       ["g."] = "actions.toggle_hidden",
+      ["q"] = "actions.close", -- Add a quick way to close the floating window
     },
   })
 end
-
-local oil_sidebar_open = false
-local oil_sidebar_bufnr = 0
-local oil_sidebar_width = 30 -- Adjust width as needed
-
-function M.toggle_oil_sidebar()
-  if oil_sidebar_open then
-    -- Close the sidebar
-    if vim.api.nvim_buf_is_valid(oil_sidebar_bufnr) then
-      vim.api.nvim_buf_delete(oil_sidebar_bufnr, { force = true })
-    end
-    oil_sidebar_open = false
-    oil_sidebar_bufnr = 0
-  else
-    local current_win = vim.api.nvim_get_current_win()
-
-    vim.cmd('wincmd t')
-    -- Open oil in a vertical split
-    vim.cmd('leftabove ' .. oil_sidebar_width .. 'vsplit')
-
-    -- Get the current directory or use vim's current working directory
-    local path = vim.fn.getcwd()
-
-    -- Open oil in the new split
-    vim.cmd('Oil ' .. path)
-
-    -- Store the buffer number for later
-    oil_sidebar_bufnr = vim.api.nvim_get_current_buf()
-
-    -- Set some buffer-local options to make it behave like a sidebar
-    vim.bo[oil_sidebar_bufnr].buflisted = false
-    vim.wo.winfixwidth = true
-
-    -- Mark as open
-    oil_sidebar_open = true
-  end
-end
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "oil",
-  callback = function(ev)
-    -- If this is our sidebar buffer, set up additional configuration
-    if oil_sidebar_open and vim.api.nvim_get_current_buf() == oil_sidebar_bufnr then
-      -- Make sure there's a window to the right to receive the file
-      local win_id = vim.fn.winnr('l')
-      if win_id == 0 then
-        -- If there's no window to the right, create one
-        vim.cmd('rightbelow vsplit')
-        vim.cmd('wincmd h') -- Go back to the oil buffer
-      end
-    end
-  end,
-})
 
 return M

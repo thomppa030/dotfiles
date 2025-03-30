@@ -1,5 +1,5 @@
 require("options")
-require("keymaps")
+require("keymaps").setup()
 
 -- Plugins
 require("plugins")
