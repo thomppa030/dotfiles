@@ -166,11 +166,17 @@ link_config() {
         echo -e "${RED}Failed to create link.${NC}"
     fi
 
-#    echo -e "${GREEN}Creating symbolic link from .zshrc to HOME{NC}"
-#    ln -sf ".zshrc" "~/.zshrc"
+    echo -e "${YELLOW}Note: changing default shell to zsh.${NC}"
+    chsh -s /usr/bin/zsh
 
-#    echo -e "${GREEN}Creating symbolic link from starship.toml to .config/{NC}"
-#    ln -sf "starship.toml" "~/.config/starship.toml"
+    touch ~/.zshrc
+    touch ~/.config/starship.toml
+
+    echo -e "${GREEN}Creating symbolic link from .zshrc to HOME{NC}"
+    ln -sf "${REPO_DIR}/.zshrc" "~/.zshrc"
+
+    echo -e "${GREEN}Creating symbolic link from starship.toml to .config/{NC}"
+    ln -sf "${REPO_DIR}/starship.toml" "~/.config/starship.toml"
 }
 
 main() {
@@ -188,6 +194,7 @@ main() {
     done
     
     echo -e "${GREEN}All packages installed and configurations linked.${NC}"
+
 
     echo -e "${YELLOW}Note: Running hyprctl reload, to check immediate hyprland effects.${NC}"
     hyprctl reload
