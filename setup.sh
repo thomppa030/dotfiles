@@ -12,7 +12,11 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Required packages to install via Paru
-PACKAGES=("foot" "wofi" "hyprland" "neovim" "waybar" "dunst")
+PACKAGES=("foot" "wofi" "hyprland" "swww" "neovim" "waybar" "dunst")
+
+EXTRA_PACKAGES=("deno" "ripgrep" "swww" "btop" "wlogout" "starship" "thunar" "thunar-archive-plugin" "eza" "zsh" "cmake" "pavucontrol")
+
+FONT_PACKAGES=("ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "inter-font")
 
 BUILD_DIR="$HOME/builds"
 CONFIG_DIR="$HOME/.config"
@@ -53,7 +57,8 @@ install_paru() {
     cd "$BUILD_DIR"
     
     # Clone the Paru repository
-    git clone "https://github.com/Morganamilo/paru"
+    git clone "https://aur.archlinux.org/paru.git"
+     
     cd paru
     
     # Build and install Paru
@@ -77,6 +82,10 @@ install_packages() {
     
     # Install all packages in one command
     paru -S --needed --noconfirm "${PACKAGES[@]}"
+
+    paru -S --needed --noconfirm "${EXTRA_PACKAGES[@]}"
+
+    paru -S --needed --noconfirm "${FONT_PACKAGES[@]}"
     
     echo -e "${GREEN}All packages installed.${NC}"
 }
@@ -179,6 +188,10 @@ main() {
     done
     
     echo -e "${GREEN}All packages installed and configurations linked.${NC}"
+
+    echo -e "${YELLOW}Note: Running hyprctl reload, to check immediate hyprland effects.${NC}"
+    hyprctl reload
+
     echo -e "${YELLOW}Note: You may need to restart your window manager or reload configurations for changes to take effect.${NC}"
 }
 
