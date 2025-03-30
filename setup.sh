@@ -14,7 +14,7 @@ NC='\033[0m' # No Color
 # Required packages to install via Paru
 PACKAGES=("foot" "wofi" "hyprland" "swww" "neovim" "waybar" "dunst")
 
-EXTRA_PACKAGES=("deno" "ripgrep" "swww" "btop" "wlogout" "starship" "thunar" "thunar-archive-plugin" "eza" "zsh" "cmake" "pavucontrol")
+EXTRA_PACKAGES=("deno" "neofetch" "ripgrep" "swww" "btop" "wlogout" "starship" "thunar" "thunar-archive-plugin" "eza" "zsh" "cmake" "pavucontrol")
 
 FONT_PACKAGES=("ttf-jetbrains-mono-nerd" "noto-fonts-emoji" "inter-font")
 
@@ -198,6 +198,8 @@ main() {
 
     echo -e "${YELLOW}Note: Running hyprctl reload, to check immediate hyprland effects.${NC}"
     hyprctl reload
+
+    neofetch
 
     echo -e "${YELLOW}Note: You may need to restart your window manager or reload configurations for changes to take effect.${NC}"
 }
