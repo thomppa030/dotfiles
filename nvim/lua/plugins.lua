@@ -1,5 +1,5 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
@@ -13,13 +13,18 @@ vim.opt.rtp:prepend(lazypath)
 
 return require("lazy").setup({
   {
-    "folke/neodev.nvim",
+    "folke/lazydev.nvim",
+    ft = "lua",
     opts = {},
-    priority = 100,
   },
 
   {
     "nvim-neotest/nvim-nio"
+  },
+
+  {
+    "habamax/vim-godot",
+    ft = "gdscript",
   },
 
   require('plugins.telescope'),
@@ -28,6 +33,7 @@ return require("lazy").setup({
   {
     "thomppa030/unreal-tools.nvim",
     branch = "dev",
+    ft = { "cpp", "h", "hpp" },
     dependencies = {
       "neovim/nvim-lspconfig",
       "nvim-telescope/telescope.nvim",
@@ -40,31 +46,29 @@ return require("lazy").setup({
     end,
   },
 
-  {
-    -- LSP
-    require('plugins.lsp'),
-    -- Autocompletion
-    require('plugins.completion'),
-    require('plugins.statusline'),
-  },
+  require('plugins.lsp'),
+  require('plugins.conform'),
+  require('plugins.completion'),
+  require('plugins.statusline'),
 
-  {
-    'numToStr/Comment.nvim',
-    opts = {
-      padding = true,
-      mappings = {
-        basic = true,
-        extra = true
-      }
-    }
-  },
   -- which-key
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
-    opts = {
-
-    },
+    config = function()
+      local wk = require("which-key")
+      wk.setup({})
+      wk.add({
+        { "<leader>f", group = "Find" },
+        { "<leader>g", group = "Git" },
+        { "<leader>l", group = "LSP" },
+        { "<leader>d", group = "Debug" },
+        { "<leader>t", group = "Terminal" },
+        { "<leader>w", group = "Window" },
+        { "<leader>s", group = "Settings" },
+        { "<leader>c", group = "Code" },
+      })
+    end,
     keys = {
       {
         "<leader>?",
@@ -76,46 +80,28 @@ return require("lazy").setup({
     },
   },
 
-  -- Colorizer color Previewer
-  {
-    require('plugins.colorizer')
-  },
+  require('plugins.colorizer'),
+  require('plugins.gitsigns'),
 
-  {
-    "toppair/peek.nvim",
-    event = { "VeryLazy" },
-    build = "deno task --quiet build:fast",
-    config = function()
-      require("peek").setup({
-        app = 'browser',
-        close_on_delete = true,
-        update_on_change = true,
-      })
-      vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
-      vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
-    end,
-  },
   {
     'nvim-treesitter/nvim-treesitter',
+    event = { "BufReadPre", "BufNewFile" },
     build = ':TSUpdate',
-    config = function()
-      require('nvim-treesitter.configs').setup({
-        ensure_installed = { "lua", "vim", "vimdoc", "javascript", "typescript", "python" },
-        sync_install = false,
-        auto_install = true,
-        highlight = { enable = true },
-        indent = { enable = true },
-      })
-    end,
+    opts = {
+      ensure_installed = { "lua", "vim", "vimdoc", "javascript", "typescript", "python" },
+      sync_install = false,
+      auto_install = true,
+      highlight = { enable = true },
+      indent = { enable = true },
+    },
   },
 
   {
-    'tjdevries/present.nvim'
+    'tjdevries/present.nvim',
+    cmd = "Present",
   },
 
-  {
-    require('plugins.terminal')
-  },
+  require('plugins.terminal'),
 
   {
     "windwp/nvim-autopairs",
@@ -146,24 +132,12 @@ return require("lazy").setup({
       npairs.add_rules({
         Rule("<", ">", { "lua", "html", "xml", "tsx", "jsx", "typescript", "javascript", "svelte", "vue" })
       })
-
-      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-
-      local cmp = require('cmp')
-      cmp.event:on(
-        'confirm_done',
-        cmp_autopairs.on_confirm_done()
-      )
     end,
   },
-  -- Lua
   {
     "folke/zen-mode.nvim",
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    }
+    cmd = "ZenMode",
+    opts = {},
   },
   {
     'goolord/alpha-nvim',
@@ -174,8 +148,8 @@ return require("lazy").setup({
   },
   {
     'brianhuster/live-preview.nvim',
+    cmd = "LivePreview",
     dependencies = {
-      -- You can choose one of the following pickers
       'nvim-telescope/telescope.nvim',
     },
   },
@@ -184,10 +158,7 @@ return require("lazy").setup({
     ---@module 'oil'
     ---@type oil.SetupOpts
     opts = {},
-    -- Optional dependencies
-    -- dependencies = { { "echasnovski/mini.icons", opts = {} } },
-    dependencies = { "nvim-tree/nvim-web-devicons" }, -- use if you prefer nvim-web-devicons
-    -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     config = function()
       require('plugins.oil').setup()

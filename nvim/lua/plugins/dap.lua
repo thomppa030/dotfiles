@@ -1,6 +1,13 @@
 -- plugins/dap.lua
 return {
   "mfussenegger/nvim-dap",
+  keys = {
+    { "<leader>db", desc = "Toggle breakpoint" },
+    { "<leader>dc", desc = "Continue" },
+    { "<leader>di", desc = "Step into" },
+    { "<leader>do", desc = "Step over" },
+    { "<leader>du", desc = "Toggle DAP UI" },
+  },
   dependencies = {
     "rcarriga/nvim-dap-ui",
     "theHamsta/nvim-dap-virtual-text",
@@ -23,8 +30,7 @@ return {
         repl = "r",
         toggle = "t",
       },
-      -- Expand lines larger than the window
-      expand_lines = vim.fn.has("nvim-0.7") == 1,
+      expand_lines = true,
       layouts = {
         {
           elements = {
@@ -259,17 +265,8 @@ return {
     vim.keymap.set("n", "<leader>du", function() dapui.toggle() end, { desc = "Toggle UI" })
     vim.keymap.set("n", "<leader>dx", function() dap.terminate() end, { desc = "Terminate" })
 
-    -- Enable telescope integration
+    -- Enable telescope integration (keymaps in keymaps/telescope.lua)
     require('telescope').load_extension('dap')
-    vim.keymap.set("n", "<leader>dcc", function() require('telescope').extensions.dap.commands {} end,
-      { desc = "Commands" })
-    vim.keymap.set("n", "<leader>dco", function() require('telescope').extensions.dap.configurations {} end,
-      { desc = "Configurations" })
-    vim.keymap.set("n", "<leader>dlb", function() require('telescope').extensions.dap.list_breakpoints {} end,
-      { desc = "List breakpoints" })
-    vim.keymap.set("n", "<leader>dv", function() require('telescope').extensions.dap.variables {} end,
-      { desc = "Variables" })
-    vim.keymap.set("n", "<leader>df", function() require('telescope').extensions.dap.frames {} end, { desc = "Frames" })
   end
 }
 

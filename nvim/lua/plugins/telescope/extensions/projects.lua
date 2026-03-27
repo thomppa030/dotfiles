@@ -1,5 +1,4 @@
 -- A lightweight project extension for telescope.nvim
-local mappings = require('plugins.telescope.mappings')
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local conf = require('telescope.config').values
@@ -182,7 +181,7 @@ local project_previewer = previewers.new_buffer_previewer({
     end
 
     vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
-    vim.api.nvim_buf_set_option(self.state.bufnr, "filetype", "markdown")
+    vim.bo[self.state.bufnr].filetype = "markdown"
   end
 })
 
@@ -545,25 +544,9 @@ function project.init()
   project.load_data()
 end
 
--- Register the mappings
-mappings.register_mode_mappings('project', {
-  ['<leader>fp'] = {
-    command = project.browse_projects,
-    desc = 'Browse all projects'
-  },
-  ['<leader>fr'] = {
-    command = project.browse_recent_projects,
-    desc = 'Browse recent projects'
-  },
-  ['<leader>fa'] = {
-    command = project.add_current_directory,
-    desc = 'Add current directory as project'
-  },
-  ['<leader>ft'] = {
-    command = project.search_by_tags,
-    desc = 'Search projects by tag'
-  },
-})
+-- Register keymaps directly
+vim.keymap.set('n', '<leader>fp', project.browse_projects, { desc = 'Browse all projects' })
+vim.keymap.set('n', '<leader>fR', project.browse_recent_projects, { desc = 'Browse recent projects' })
+vim.keymap.set('n', '<leader>fP', project.add_current_directory, { desc = 'Add current directory as project' })
 
--- Return the module
 return project

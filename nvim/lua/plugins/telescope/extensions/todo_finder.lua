@@ -1,6 +1,5 @@
 -- plugins/telescope/extensions/todo_finder.lua
 local extensions = require('plugins.telescope.extensions')
-local mappings = require('plugins.telescope.mappings')
 local pickers = require('telescope.pickers')
 local finders = require('telescope.finders')
 local conf = require('telescope.config').values
@@ -475,7 +474,7 @@ local todo_previewer = previewers.new_buffer_previewer({
     vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
 
     -- Set filetype for syntax highlighting
-    vim.api.nvim_buf_set_option(self.state.bufnr, "filetype", "markdown")
+    vim.bo[self.state.bufnr].filetype = "markdown"
   end
 })
 
@@ -697,17 +696,8 @@ function todo_finder.setup(opts)
   config = vim.tbl_deep_extend("force", config, opts or {})
 end
 
--- Register mappings
-mappings.register_mode_mappings('todo_finder', {
-  ['<leader>ft'] = {
-    command = todo_finder.find_project_todos,
-    desc = 'Find TODOs in project'
-  },
-  ['<leader>fT'] = {
-    command = todo_finder.find_file_todos,
-    desc = 'Find TODOs in current file'
-  },
-})
+-- Register keymaps directly
+vim.keymap.set('n', '<leader>ft', todo_finder.find_project_todos, { desc = 'Find TODOs in project' })
+vim.keymap.set('n', '<leader>fT', todo_finder.find_file_todos, { desc = 'Find TODOs in current file' })
 
--- Register the extension
 return extensions.register_extension('todo_finder', todo_finder)
