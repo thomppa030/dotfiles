@@ -10,7 +10,7 @@ THEMEIS=$(readlink -f ~/.config/waybar/style.css | cut -d '-' -f2)
 if [ "$THEMEIS" == "dark.css" ]; then
     swww img ~/.config/hypr/wallpaper-dark.png
 else
-    swww img ~/.config/hypr/wallpaper-dark.png
+    swww img ~/.config/hypr/wallpaper.png
 fi
 
 
