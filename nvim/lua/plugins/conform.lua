@@ -17,6 +17,7 @@ return {
       yaml = { "prettier" },
       markdown = { "prettier" },
       cmake = { "cmake_format" },
+      rust = { "rustfmt" },
     },
     format_on_save = {
       timeout_ms = 500,

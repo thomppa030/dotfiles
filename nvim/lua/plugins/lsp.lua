@@ -22,7 +22,7 @@ return {
     end
 
     require("mason-lspconfig").setup({
-      ensure_installed = { "pylsp", "lua_ls", "cmake", "clangd", "ts_ls", "html", "svelte" },
+      ensure_installed = { "pylsp", "lua_ls", "cmake", "clangd", "ts_ls", "html", "svelte", "rust_analyzer" },
       automatic_installation = true,
     })
 
@@ -51,12 +51,21 @@ return {
       },
     })
 
-    -- Manual format keymap via LspAttach (format-on-save handled by conform.nvim)
+    -- LSP keymaps via LspAttach (format-on-save handled by conform.nvim)
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
+        local opts = function(desc) return { buffer = args.buf, desc = desc } end
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts("Go to declaration"))
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts("Go to definition"))
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts("Hover"))
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts("Go to implementation"))
+        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts("Signature help"))
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts("Rename"))
+        vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts("Code action"))
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts("References"))
         vim.keymap.set('n', '<leader>lf', function()
           require("conform").format({ async = true, lsp_fallback = true })
-        end, { buffer = args.buf, desc = "Format file" })
+        end, opts("Format file"))
       end,
     })
 
@@ -84,7 +93,7 @@ return {
 
     vim.lsp.enable({
       "lua_ls", "ts_ls", "denols", "clangd", "html",
-      "svelte", "cmake", "jsonls", "pylsp",
+      "svelte", "cmake", "jsonls", "pylsp", "rust_analyzer",
     })
   end
 }
